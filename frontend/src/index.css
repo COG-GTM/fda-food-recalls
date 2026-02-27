@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply m-0 font-sans antialiased;
+    background-color: #0F172A;
+    color: #FFFFFF;
+  }
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* Leaflet info overlay */
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: rgba(30, 41, 59, 0.9);
+  color: #CBD5E1;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+}
+.info h5 {
+  margin: 0 0 5px;
+  color: #22D3EE;
+}
+
+.legend {
+  line-height: 19px;
+  color: #CBD5E1;
+}
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+/* rc-slider custom styling */
+.rc-slider-track {
+  background-color: #22D3EE !important;
+}
+.rc-slider-handle {
+  border-color: #22D3EE !important;
+  background-color: #1E293B !important;
+}
+.rc-slider-rail {
+  background-color: #334155 !important;
+}
+
+/* Recharts custom styling */
+.recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
