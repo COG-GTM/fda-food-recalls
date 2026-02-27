@@ -40,6 +40,7 @@ export const CHOROPLETH_COLORS = [
  */
 export function getChoroplethColor(density, max, min) {
   const range = max - min;
+  if (range === 0) return CHOROPLETH_COLORS[0];
   const step = 0.125 * range;
 
   if (density >= max - step) return CHOROPLETH_COLORS[7];

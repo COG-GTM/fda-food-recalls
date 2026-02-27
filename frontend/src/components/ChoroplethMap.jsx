@@ -6,9 +6,8 @@ import { statesData as rawStatesData } from '../data/us-states';
 import { stateArray, statePopulation } from '../utils/stateData';
 import { getChoroplethColor, CHOROPLETH_COLORS } from '../utils/colors';
 
-function InfoControl({ statesData, normalize }) {
+function InfoControl({ statesData, normalize, infoRef }) {
   const map = useMap();
-  const infoRef = useRef(null);
 
   useEffect(() => {
     const info = L.control();
@@ -33,11 +32,12 @@ function InfoControl({ statesData, normalize }) {
       }
     };
     info.addTo(map);
-    infoRef.current = info;
+    if (infoRef) infoRef.current = info;
     return () => {
+      if (infoRef) infoRef.current = null;
       info.remove();
     };
-  }, [map, normalize]);
+  }, [map, normalize, infoRef]);
 
   return null;
 }
@@ -94,6 +94,7 @@ export default function ChoroplethMap({
   showPopups = false,
 }) {
   const geoJsonRef = useRef(null);
+  const infoRef = useRef(null);
 
   const { geoData, minDensity, maxDensity } = useMemo(() => {
     // Deep clone the raw GeoJSON so mutations don't leak
@@ -140,17 +141,18 @@ export default function ChoroplethMap({
         target.setStyle({ weight: 2, color: '#94A3B8', dashArray: '', fillOpacity: 0.85 });
         target.bringToFront();
 
-        // Update info control if it exists
-        const map = target._map;
-        if (map) {
-          map.eachLayer((l) => {
-            // noop - info control updates via its own mechanism
-          });
+        // Update info control with hovered state properties
+        if (infoRef.current) {
+          infoRef.current.update(feature.properties);
         }
       },
       mouseout: (e) => {
         if (geoJsonRef.current) {
           geoJsonRef.current.resetStyle(e.target);
+        }
+        // Reset info control to default state
+        if (infoRef.current) {
+          infoRef.current.update();
         }
       },
     });
@@ -189,7 +191,7 @@ export default function ChoroplethMap({
           onEachFeature={onEachFeature}
           ref={geoJsonRef}
         />
-        <InfoControl statesData={geoData} normalize={normalize} />
+        <InfoControl statesData={geoData} normalize={normalize} infoRef={infoRef} />
         <LegendControl minDensity={minDensity} maxDensity={maxDensity} />
       </MapContainer>
     </div>
