@@ -6,6 +6,16 @@ import { statesData as rawStatesData } from '../data/us-states';
 import { stateArray, statePopulation } from '../utils/stateData';
 import { getChoroplethColor, CHOROPLETH_COLORS } from '../utils/colors';
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function InfoControl({ statesData, normalize, infoRef }) {
   const map = useMap();
 
@@ -158,12 +168,12 @@ export default function ChoroplethMap({
     });
 
     if (showPopups && feature.properties.recallDetails && feature.properties.recallDetails.length > 0) {
-      let html = `<div style="max-width:350px"><h5 style="text-align:center;margin:0 0 8px"><strong>${feature.properties.name} Recall Details</strong></h5>`;
+      let html = `<div style="max-width:350px"><h5 style="text-align:center;margin:0 0 8px"><strong>${escapeHtml(feature.properties.name)} Recall Details</strong></h5>`;
       for (const detail of feature.properties.recallDetails) {
-        html += `<hr style="margin:4px 0"/><p style="margin:2px 0;font-size:12px"><strong>Firm:</strong> ${detail.recalling_firm}<br/>
-          <strong>Product:</strong> ${detail.product_description}<br/>
-          <strong>Reason:</strong> ${detail.reason_for_recall}<br/>
-          <strong>Class:</strong> ${detail.classification}</p>`;
+        html += `<hr style="margin:4px 0"/><p style="margin:2px 0;font-size:12px"><strong>Firm:</strong> ${escapeHtml(detail.recalling_firm)}<br/>
+          <strong>Product:</strong> ${escapeHtml(detail.product_description)}<br/>
+          <strong>Reason:</strong> ${escapeHtml(detail.reason_for_recall)}<br/>
+          <strong>Class:</strong> ${escapeHtml(detail.classification)}</p>`;
       }
       html += '</div>';
       layer.bindPopup(html, { maxHeight: 200 });

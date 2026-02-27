@@ -19,6 +19,7 @@ export function useRecallData(filters) {
     const { class1, class2, class3, startDate, endDate } = filters;
     if (!startDate || !endDate) return;
 
+    let active = true;
     const controller = new AbortController();
     setLoading(true);
     setError(null);
@@ -31,17 +32,19 @@ export function useRecallData(filters) {
         return res.json();
       })
       .then((recalls) => {
-        const result = buildRecallData(recalls);
-        setData(result);
+        if (active) {
+          const result = buildRecallData(recalls);
+          setData(result);
+        }
       })
       .catch((err) => {
-        if (err.name !== 'AbortError') {
+        if (active && err.name !== 'AbortError') {
           setError(err.message);
         }
       })
-      .finally(() => setLoading(false));
+      .finally(() => { if (active) setLoading(false); });
 
-    return () => controller.abort();
+    return () => { active = false; controller.abort(); };
   }, [filters.class1, filters.class2, filters.class3, filters.startDate, filters.endDate]);
 
   return { ...data, loading, error };
@@ -109,6 +112,7 @@ export function useCPSCRecallData(filters) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let active = true;
     const controller = new AbortController();
     setLoading(true);
     setError(null);
@@ -124,17 +128,19 @@ export function useCPSCRecallData(filters) {
         return res.json();
       })
       .then((recalls) => {
-        const result = buildRecallData(recalls);
-        setData(result);
+        if (active) {
+          const result = buildRecallData(recalls);
+          setData(result);
+        }
       })
       .catch((err) => {
-        if (err.name !== 'AbortError') {
+        if (active && err.name !== 'AbortError') {
           setError(err.message);
         }
       })
-      .finally(() => setLoading(false));
+      .finally(() => { if (active) setLoading(false); });
 
-    return () => controller.abort();
+    return () => { active = false; controller.abort(); };
   }, [filters.category, filters.startDate, filters.endDate]);
 
   return { ...data, loading, error };
