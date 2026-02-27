@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import RecallBarChart from '../components/RecallBarChart'
 import ChoroplethMap from '../components/ChoroplethMap'
 import ClassificationFilter from '../components/ClassificationFilter'
@@ -14,6 +14,11 @@ export default function RecentRecalls() {
   const [normalize, setNormalize] = useState(false)
   const [lastUpdated, setLastUpdated] = useState(null)
   const [selectedState, setSelectedState] = useState(null)
+
+  // Stable callback to avoid recreating Leaflet map on every state click
+  const handleStateClick = useCallback((state) => {
+    setSelectedState(prev => state === prev ? null : state)
+  }, [])
 
   const fetchRecalls = useCallback(async () => {
     setLoading(true)
@@ -33,9 +38,9 @@ export default function RecentRecalls() {
     fetchRecalls()
   }, [fetchRecalls])
 
-  const filtered = filterByClass(rawData, class1, class2, class3)
-  const stateCounts = countRecallsByState(filtered)
-  const { firmNames, firmCounts } = countRecallsByFirm(filtered)
+  const filtered = useMemo(() => filterByClass(rawData, class1, class2, class3), [rawData, class1, class2, class3])
+  const stateCounts = useMemo(() => countRecallsByState(filtered), [filtered])
+  const { firmNames, firmCounts } = useMemo(() => countRecallsByFirm(filtered), [filtered])
 
   // Get date range from data
   const dates = rawData.map(r => r.recall_initiation_date).filter(Boolean).sort()
@@ -111,7 +116,7 @@ export default function RecentRecalls() {
               <ChoroplethMap
                 recallCounts={stateCounts}
                 normalize={normalize}
-                onStateClick={(state) => setSelectedState(state === selectedState ? null : state)}
+                onStateClick={handleStateClick}
               />
             )}
           </div>
