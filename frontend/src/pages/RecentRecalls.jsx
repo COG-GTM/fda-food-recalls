@@ -3,7 +3,7 @@ import RecallBarChart from '../components/RecallBarChart'
 import ChoroplethMap from '../components/ChoroplethMap'
 import ClassificationFilter from '../components/ClassificationFilter'
 import StatsCard from '../components/StatsCard'
-import { countRecallsByState, countRecallsByFirm, filterByClass } from '../data/stateUtils'
+import { countRecallsByState, countRecallsByFirm, filterByClass, STATE_NAMES, STATE_INITIALS } from '../data/stateUtils'
 
 export default function RecentRecalls() {
   const [rawData, setRawData] = useState([])
@@ -47,7 +47,11 @@ export default function RecentRecalls() {
     const pattern = (r.distribution_pattern || '').replace(/,/g, '')
     const patternLower = pattern.toLowerCase()
     const words = pattern.split(/\s+/)
-    return words.some(w => w.toLowerCase() === 'nationwide') || new RegExp('\\b' + selectedState.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(patternLower)
+    const stateIdx = STATE_NAMES.indexOf(selectedState)
+    const abbrev = stateIdx >= 0 ? STATE_INITIALS[stateIdx] : null
+    return words.some(w => w.toLowerCase() === 'nationwide') ||
+      new RegExp('\\b' + selectedState.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(patternLower) ||
+      (abbrev && words.includes(abbrev))
   }) : []
 
   return (
