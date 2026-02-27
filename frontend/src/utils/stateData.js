@@ -30,6 +30,10 @@ export const statePopulation = [
   1852994, 5686986, 563626, 3725789
 ];
 
+// Pre-computed regexes for state name and abbreviation matching
+const stateNameRegexes = stateArray.map((name) => new RegExp(`\\b${name}\\b`, "i"));
+const stateAbbrevRegexes = initialsArray.map((abbr) => new RegExp(`\\b${abbr}\\b`));
+
 /**
  * Parse a distribution_pattern string and count recalls per state.
  * Returns an array of counts indexed by stateArray position.
@@ -44,8 +48,7 @@ export function countRecallsByState(recalls) {
     const isNationwide = distPatternLower.includes("nationwide");
 
     for (let j = 0; j < stateArray.length; j++) {
-      const abbrevRegex = new RegExp('\\b' + initialsArray[j] + '\\b');
-      if (isNationwide || distPatternLower.includes(stateArray[j].toLowerCase()) || abbrevRegex.test(distPattern)) {
+      if (isNationwide || stateNameRegexes[j].test(distPattern) || stateAbbrevRegexes[j].test(distPattern)) {
         stateRecallCount[j] += 1;
       }
     }
@@ -75,8 +78,7 @@ export function buildRecallData(recalls, includeDetails = false) {
     const isNationwide = distPatternLower.includes("nationwide");
 
     for (let j = 0; j < stateArray.length; j++) {
-      const abbrevRegex = new RegExp('\\b' + initialsArray[j] + '\\b');
-      if (isNationwide || distPatternLower.includes(stateArray[j].toLowerCase()) || abbrevRegex.test(distPattern)) {
+      if (isNationwide || stateNameRegexes[j].test(distPattern) || stateAbbrevRegexes[j].test(distPattern)) {
         stateRecallCount[j] += 1;
         if (includeDetails) {
           stateRecallDetails[j].push({
