@@ -97,7 +97,7 @@ export default function RecentRecalls() {
               Recalls by State {normalize && '(per 1,000,000 people)'}
             </h3>
             {loading ? (
-              <div className="h-[500px] flex items-center justify-center text-slate-400">Loading...</div>
+              <div style={{ height: '500px' }} className="flex items-center justify-center text-slate-400">Loading...</div>
             ) : (
               <ChoroplethMap
                 recallCounts={stateCounts}
@@ -121,7 +121,7 @@ export default function RecentRecalls() {
                   Close
                 </button>
               </div>
-              <div className="space-y-3 max-h-[400px] overflow-y-auto">
+              <div className="space-y-3 overflow-y-auto" style={{ maxHeight: '400px' }}>
                 {stateRecalls.map((recall, i) => (
                   <div key={i} className="bg-navy rounded-lg p-3 border border-slate-700/50">
                     <div className="flex items-center justify-between mb-1">

@@ -109,7 +109,7 @@ export default function RecallsByState() {
               <span className="text-accent-cyan text-sm font-medium">National Average</span>
             </label>
 
-            <div className="max-h-[500px] overflow-y-auto space-y-1">
+            <div className="overflow-y-auto space-y-1" style={{ maxHeight: '500px' }}>
               {filteredStates.map(state => (
                 <label key={state} className="flex items-center gap-2 cursor-pointer py-0.5">
                   <input
@@ -147,7 +147,7 @@ export default function RecallsByState() {
               Recall Trends ({selectedStates.length} selected)
             </h3>
             {loading ? (
-              <div className="h-[600px] flex items-center justify-center text-slate-400">Loading chart data...</div>
+              <div style={{ height: '600px' }} className="flex items-center justify-center text-slate-400">Loading chart data...</div>
             ) : (
               <ResponsiveContainer width="100%" height={600}>
                 <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>

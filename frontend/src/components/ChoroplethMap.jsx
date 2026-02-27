@@ -138,5 +138,5 @@ export default function ChoroplethMap({ recallCounts, normalize = false, onState
     }
   }, [recallCounts, normalize, onStateClick])
 
-  return <div ref={mapRef} className="w-full h-[500px] rounded-xl" />
+  return <div ref={mapRef} style={{ width: '100%', height: '500px' }} className="rounded-xl" />
 }

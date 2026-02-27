@@ -113,7 +113,7 @@ export default function PastRecalls() {
               Recalls by State {normalize && '(per 1,000,000 people)'}
             </h3>
             {loading ? (
-              <div className="h-[500px] flex items-center justify-center text-slate-400">Loading map data...</div>
+              <div style={{ height: '500px' }} className="flex items-center justify-center text-slate-400">Loading map data...</div>
             ) : (
               <ChoroplethMap recallCounts={stateCounts} normalize={normalize} />
             )}
