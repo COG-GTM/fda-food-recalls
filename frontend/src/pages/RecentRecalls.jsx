@@ -49,8 +49,11 @@ export default function RecentRecalls() {
     const words = pattern.split(/\s+/)
     const stateIdx = STATE_NAMES.indexOf(selectedState)
     const abbrev = stateIdx >= 0 ? STATE_INITIALS[stateIdx] : null
+    const escaped = selectedState.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    // Use negative lookbehind to prevent "Virginia" matching inside "West Virginia"
+    const prefix = selectedState === 'Virginia' ? '(?<!west )' : ''
     return words.some(w => w.toLowerCase() === 'nationwide') ||
-      new RegExp('\\b' + selectedState.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(patternLower) ||
+      new RegExp(prefix + '\\b' + escaped + '\\b').test(patternLower) ||
       (abbrev && words.includes(abbrev))
   }) : []
 
