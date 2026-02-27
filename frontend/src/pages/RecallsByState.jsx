@@ -161,7 +161,7 @@ export default function RecallsByState() {
                       key={state}
                       type="monotone"
                       dataKey={state}
-                      stroke={state === 'National Average' ? '#22D3EE' : LINE_COLORS[(i - 1) % LINE_COLORS.length]}
+                      stroke={state === 'National Average' ? '#22D3EE' : LINE_COLORS[((i - 1) % LINE_COLORS.length + LINE_COLORS.length) % LINE_COLORS.length]}
                       strokeWidth={state === 'National Average' ? 3 : 2}
                       dot={{ r: state === 'National Average' ? 5 : 3 }}
                       activeDot={{ r: 6 }}

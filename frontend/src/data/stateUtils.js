@@ -26,12 +26,13 @@ export function countRecallsByState(recalls, distributionField = 'distribution_p
 
   recalls.forEach(recall => {
     const pattern = (recall[distributionField] || '').replace(/,/g, '')
+    const patternLower = pattern.toLowerCase()
     const words = pattern.split(/\s+/)
 
     const isNationwide = words.some(w => w.toLowerCase() === 'nationwide')
 
     STATE_NAMES.forEach((name, idx) => {
-      if (isNationwide || words.includes(name) || words.includes(STATE_INITIALS[idx])) {
+      if (isNationwide || patternLower.includes(name.toLowerCase()) || words.includes(STATE_INITIALS[idx])) {
         counts[name] += 1
       }
     })

@@ -45,8 +45,9 @@ export default function RecentRecalls() {
   // Get recalls for selected state
   const stateRecalls = selectedState ? filtered.filter(r => {
     const pattern = (r.distribution_pattern || '').replace(/,/g, '')
+    const patternLower = pattern.toLowerCase()
     const words = pattern.split(/\s+/)
-    return words.some(w => w.toLowerCase() === 'nationwide') || words.includes(selectedState)
+    return words.some(w => w.toLowerCase() === 'nationwide') || patternLower.includes(selectedState.toLowerCase())
   }) : []
 
   return (
