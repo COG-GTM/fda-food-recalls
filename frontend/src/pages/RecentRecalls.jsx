@@ -3,7 +3,7 @@ import RecallBarChart from '../components/RecallBarChart'
 import ChoroplethMap from '../components/ChoroplethMap'
 import ClassificationFilter from '../components/ClassificationFilter'
 import StatsCard from '../components/StatsCard'
-import { countRecallsByState, countRecallsByFirm, filterByClass, STATE_NAMES, STATE_INITIALS } from '../data/stateUtils'
+import { countRecallsByState, countRecallsByFirm, filterByClass, STATE_NAMES, STATE_INITIALS, AMBIGUOUS_ABBREVS, hasAbbreviationContext } from '../data/stateUtils'
 
 export default function RecentRecalls() {
   const [rawData, setRawData] = useState([])
@@ -44,7 +44,7 @@ export default function RecentRecalls() {
 
   // Get recalls for selected state
   const stateRecalls = selectedState ? filtered.filter(r => {
-    const pattern = (r.distribution_pattern || '').replace(/,/g, '')
+    const pattern = (r.distribution_pattern || '').replace(/,/g, ' ')
     const patternLower = pattern.toLowerCase()
     const words = pattern.split(/\s+/)
     const stateIdx = STATE_NAMES.indexOf(selectedState)
@@ -52,9 +52,11 @@ export default function RecentRecalls() {
     const escaped = selectedState.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     // Use negative lookbehind to prevent "Virginia" matching inside "West Virginia"
     const prefix = selectedState === 'Virginia' ? '(?<!west )' : ''
+    const abbrevMatch = abbrev && words.includes(abbrev) &&
+      (!AMBIGUOUS_ABBREVS.has(abbrev) || hasAbbreviationContext(words))
     return words.some(w => w.toLowerCase() === 'nationwide') ||
       new RegExp(prefix + '\\b' + escaped + '\\b').test(patternLower) ||
-      (abbrev && words.includes(abbrev))
+      abbrevMatch
   }) : []
 
   return (

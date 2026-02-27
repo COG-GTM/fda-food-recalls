@@ -27,7 +27,7 @@ export default function PastRecalls() {
   const [class3, setClass3] = useState(true)
   const [normalize, setNormalize] = useState(false)
   const [startVal, setStartVal] = useState(0)    // Jan 2012
-  const [endVal, setEndVal] = useState(83)        // Dec 2018
+  const [endVal, setEndVal] = useState(95)        // Dec 2019
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -88,7 +88,7 @@ export default function PastRecalls() {
             <div>
               <label className="text-slate-400 text-xs">Start: {formatSliderDate(startVal)}</label>
               <input
-                type="range" min="0" max="83" value={startVal}
+                type="range" min="0" max="95" value={startVal}
                 onChange={e => setStartVal(Math.min(Number(e.target.value), endVal - 1))}
                 className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-accent-cyan"
               />
@@ -96,7 +96,7 @@ export default function PastRecalls() {
             <div>
               <label className="text-slate-400 text-xs">End: {formatSliderDate(endVal)}</label>
               <input
-                type="range" min="0" max="83" value={endVal}
+                type="range" min="0" max="95" value={endVal}
                 onChange={e => setEndVal(Math.max(Number(e.target.value), startVal + 1))}
                 className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-accent-cyan"
               />
