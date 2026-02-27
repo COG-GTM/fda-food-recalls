@@ -38,13 +38,14 @@ export function countRecallsByState(recalls) {
   const stateRecallCount = new Array(stateArray.length).fill(0);
 
   for (const recall of recalls) {
-    const distPattern = (recall.distribution_pattern || "").replace(/,/g, "");
-    const distPatternArray = distPattern.split(" ");
+    const distPattern = (recall.distribution_pattern || "");
+    const distPatternLower = distPattern.toLowerCase();
 
-    const isNationwide = distPatternArray.includes("nationwide") || distPatternArray.includes("Nationwide");
+    const isNationwide = distPatternLower.includes("nationwide");
 
     for (let j = 0; j < stateArray.length; j++) {
-      if (isNationwide || distPatternArray.includes(stateArray[j]) || distPatternArray.includes(initialsArray[j])) {
+      const abbrevRegex = new RegExp('\\b' + initialsArray[j] + '\\b');
+      if (isNationwide || distPatternLower.includes(stateArray[j].toLowerCase()) || abbrevRegex.test(distPattern)) {
         stateRecallCount[j] += 1;
       }
     }
@@ -69,12 +70,13 @@ export function buildRecallData(recalls, includeDetails = false) {
     firmMap.set(firm, (firmMap.get(firm) || 0) + 1);
 
     // Count by state
-    const distPattern = (recall.distribution_pattern || "").replace(/,/g, "");
-    const distPatternArray = distPattern.split(" ");
-    const isNationwide = distPatternArray.includes("nationwide") || distPatternArray.includes("Nationwide");
+    const distPattern = (recall.distribution_pattern || "");
+    const distPatternLower = distPattern.toLowerCase();
+    const isNationwide = distPatternLower.includes("nationwide");
 
     for (let j = 0; j < stateArray.length; j++) {
-      if (isNationwide || distPatternArray.includes(stateArray[j]) || distPatternArray.includes(initialsArray[j])) {
+      const abbrevRegex = new RegExp('\\b' + initialsArray[j] + '\\b');
+      if (isNationwide || distPatternLower.includes(stateArray[j].toLowerCase()) || abbrevRegex.test(distPattern)) {
         stateRecallCount[j] += 1;
         if (includeDetails) {
           stateRecallDetails[j].push({

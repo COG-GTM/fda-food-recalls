@@ -215,6 +215,8 @@ def cpsc_recalls():
 
     # Normalize CPSC data to match FDA schema
     normalized = []
+    if not isinstance(cpsc_data, list):
+        return jsonify({"error": "Unexpected response format from CPSC API"}), 502
     for item in cpsc_data:
         # Extract manufacturer name
         manufacturers = item.get("Manufacturers", [])
