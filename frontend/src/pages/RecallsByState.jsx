@@ -3,7 +3,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { countRecallsByState, STATE_NAMES } from '../data/stateUtils'
 
 const YEARS = [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
-const LINE_COLORS = ['#22D3EE', '#60A5FA', '#818CF8', '#A78BFA', '#F87171', '#4ADE80', '#FBBF24', '#FB923C', '#E879F9', '#34D399']
+// National Average uses #22D3EE (hardcoded), so state colors start from blue to avoid collision
+const LINE_COLORS = ['#60A5FA', '#818CF8', '#A78BFA', '#F87171', '#4ADE80', '#FBBF24', '#FB923C', '#E879F9', '#34D399', '#38BDF8']
 
 export default function RecallsByState() {
   const [yearData, setYearData] = useState({})

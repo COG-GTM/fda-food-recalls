@@ -47,7 +47,7 @@ export default function RecentRecalls() {
     const pattern = (r.distribution_pattern || '').replace(/,/g, '')
     const patternLower = pattern.toLowerCase()
     const words = pattern.split(/\s+/)
-    return words.some(w => w.toLowerCase() === 'nationwide') || patternLower.includes(selectedState.toLowerCase())
+    return words.some(w => w.toLowerCase() === 'nationwide') || new RegExp('\\b' + selectedState.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(patternLower)
   }) : []
 
   return (

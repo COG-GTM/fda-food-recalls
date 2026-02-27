@@ -32,7 +32,7 @@ export function countRecallsByState(recalls, distributionField = 'distribution_p
     const isNationwide = words.some(w => w.toLowerCase() === 'nationwide')
 
     STATE_NAMES.forEach((name, idx) => {
-      if (isNationwide || patternLower.includes(name.toLowerCase()) || words.includes(STATE_INITIALS[idx])) {
+      if (isNationwide || new RegExp('\\b' + name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(patternLower) || words.includes(STATE_INITIALS[idx])) {
         counts[name] += 1
       }
     })
