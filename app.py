@@ -1,4 +1,5 @@
 import os
+from functools import lru_cache
 
 import pandas as pd
 import numpy as np
@@ -30,6 +31,10 @@ Base.prepare(db.engine, reflect=True)
 # Save references to each table
 food_db = Base.classes.Food_file
 
+# db/food.sqlite is a read-only snapshot, so each URL's JSON never changes
+# while the process runs; bound the cache so arbitrary URLs cannot grow it.
+DATA_CACHE_SIZE = 32
+
 @app.route("/")
 def index():
     """Return the homepage."""
@@ -51,6 +56,7 @@ def recalls_by_state():
     return render_template("recalls_by_state.html")
 
 @app.route("/data")
+@lru_cache(maxsize=1)
 def allData():
     """Return all data."""
 
@@ -63,6 +69,7 @@ def allData():
     return data
 
 @app.route("/data/<start_date>/<end_date>")
+@lru_cache(maxsize=DATA_CACHE_SIZE)
 def start_end(start_date, end_date):
     """Return filtered data between start and end date."""
     #dates appear in the format : 2012-08-01
@@ -83,6 +90,7 @@ def start_end(start_date, end_date):
     return recalls_list
 
 @app.route("/data/<class1>/<class2>/<class3>/<start_date>/<end_date>")
+@lru_cache(maxsize=DATA_CACHE_SIZE)
 def class2_start_end(class1,class2,class3,start_date, end_date):
     """Return filtered data between start and end date and filter by class."""
 
